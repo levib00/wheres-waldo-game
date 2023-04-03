@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import collage from '../assets/images/collage.jpg'
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, collection, doc } from 'firebase/firestore'
+import { getFirestore, getDoc, doc } from 'firebase/firestore'
+import { CharacterDropdown } from "./character-dropdown";
+import { Modal } from "./modal";
+import Stopwatch from "./stopwatch";
 
 export const Game = () => {
+  const [timerIsRunning, setTimerIsRunning] = useState(false);
+  const [dropdown, setDropdown] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [show, setShow] = useState(true)
+
   const firebaseConfig = {
     apiKey: "AIzaSyDs7oKzMuuURyHgIv6rl_u6C_eJT6nfWQc",
     authDomain: "can-you-find-10bf9.firebaseapp.com",
@@ -12,6 +20,7 @@ export const Game = () => {
     messagingSenderId: "438049237266",
     appId: "1:438049237266:web:affeb0d44a666ef86aabcb"
   };
+
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app)
@@ -40,34 +49,38 @@ export const Game = () => {
     return [ x, y ]
   }
 
-  function getPageCoordinates(event) {
-     return [event.clientX, event.clientY]
-  }
-
-  const SelectChar = () => {
-    if (isCorrectGuess()) {
-      // Fulfill win condition.
-    } else {
-      // Mark as incorrect.
-    }
-  }
-
-  const popCharList = (xCoord, yCoord) => {
+  const popCharList = (dropdownX, dropdownY) => {
     /*
     Each name will have an event listener on it that will call isCorrectGuess
     with name of selected char and coords as args.
     */
+   setDropdown(<CharacterDropdown top={dropdownY} left={dropdownX} isCorrectGuess={isCorrectGuess} />)
   }
 
   const handleClick = async(e) => {
     const mouseCoords = getMousePos(e);
     const xCoord = mouseCoords[0];
     const yCoord = mouseCoords[1];
-    console.log({xCoord, yCoord})
-    console.log(await isCorrectGuess('misaka', xCoord, yCoord));
+    popCharList(xCoord, yCoord)
+    setShowDropdown(!showDropdown)
   }  
+
+  const startAndStop = () => {
+    setTimerIsRunning(!timerIsRunning);
+  };
+
+  const myStyle = {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center'
+  }
   
   return (
-    <img src={collage} alt="Many anime characters." onClick={handleClick}></img>
+    <div style={myStyle}>
+      {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : null}
+      <Stopwatch timerIsRunning={timerIsRunning} />
+      <img style={{width: '79vw'}} src={collage} alt="Many anime characters." onClick={handleClick} />
+      {showDropdown ? dropdown : null}
+    </div>
   )
 }
