@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import collage from '../assets/images/collage.jpg'
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc } from 'firebase/firestore'
+import { getFirestore, getDoc, doc, collection, getDocs, setDoc } from 'firebase/firestore'
 import { CharacterDropdown } from "./character-dropdown";
 import { Modal } from "./modal";
+import { Checklist } from './checklist'
 import Stopwatch from "./stopwatch";
+import { v4 as uuidv4 } from 'uuid';
 
 export const Game = () => {
   const [timerIsRunning, setTimerIsRunning] = useState(false);
-  const [dropdown, setDropdown] = useState('')
+  const [dropdown, setDropdown] = useState([0, 0])
   const [showDropdown, setShowDropdown] = useState(false)
   const [show, setShow] = useState(true)
+  const [checks, setChecks] = useState({
+    misakaCheck: false,
+    vashCheck: false,
+    hieiCheck: false,
+  })
+  const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei'])
 
   const firebaseConfig = {
     apiKey: "AIzaSyDs7oKzMuuURyHgIv6rl_u6C_eJT6nfWQc",
@@ -23,9 +31,9 @@ export const Game = () => {
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app)
+  const db = getFirestore(app);
 
-  const isCorrectGuess = async(whichCharacter, xCoords, yCoords) => {
+  const isGuessCorrect = async(whichCharacter, xCoords, yCoords) => {
     const characterCollection = doc(db, 'coordinates', whichCharacter);
     const characterSnapshot = await getDoc(characterCollection);
     const coordObj = characterSnapshot.data();
@@ -35,8 +43,10 @@ export const Game = () => {
     const dbCoordy2 = coordObj['y-coord-2']
 
     if ((dbCoordx1 < xCoords && xCoords < dbCoordx2) && (dbCoordy1 < yCoords && yCoords < dbCoordy2)) {
+      console.log(true)
       return true
     } else {
+      console.log(false)
       return false
     }
   }
@@ -44,30 +54,37 @@ export const Game = () => {
   const getMousePos = (e) => {
     // e = Mouse click event.
     let rect = e.target.getBoundingClientRect();
-    let x = e.clientX - rect.left; //x position within the element.
+    let x = e.clientX; //x position within the element.
     let y = e.clientY - rect.top;  //y position within the element.
     return [ x, y ]
   }
 
-  const popCharList = (dropdownX, dropdownY) => {
-    /*
-    Each name will have an event listener on it that will call isCorrectGuess
-    with name of selected char and coords as args.
-    */
-   setDropdown(<CharacterDropdown top={dropdownY} left={dropdownX} isCorrectGuess={isCorrectGuess} />)
-  }
-
   const handleClick = async(e) => {
-    const mouseCoords = getMousePos(e);
-    const xCoord = mouseCoords[0];
-    const yCoord = mouseCoords[1];
-    popCharList(xCoord, yCoord)
-    setShowDropdown(!showDropdown)
+    if (!show) {
+      const mouseCoords = getMousePos(e);
+      const xCoord = mouseCoords[0];
+      const yCoord = mouseCoords[1];
+      setDropdown([yCoord, xCoord])
+      setShowDropdown(!showDropdown)
+      setTimeout(() => console.log(dropdown), 1000)
+    }
   }  
 
   const startAndStop = () => {
     setTimerIsRunning(!timerIsRunning);
   };
+
+  const handleCorrectGuess = (character, charactersCopy) => {
+    setChecks(prevState => ({
+      ...prevState,
+      [`${character.toLowerCase()}Check`]: true
+    }))
+    setCharacters(charactersCopy)   
+    setTimeout(() => console.log(charactersCopy), 1000) 
+    if (charactersCopy.length === 0) {
+      startAndStop()
+    }
+  }
 
   const myStyle = {
     position: 'relative',
@@ -76,11 +93,11 @@ export const Game = () => {
   }
   
   return (
-    <div style={myStyle}>
-      {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : null}
+    <div className="game-container" style={myStyle}>
+      {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} />
-      <img style={{width: '79vw'}} src={collage} alt="Many anime characters." onClick={handleClick} />
-      {showDropdown ? dropdown : null}
+      <img style={{width: '78.9vw'}} src={collage} alt="Many anime characters." onClick={handleClick} />
+      {showDropdown ? <CharacterDropdown characters={characters} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setDropdown={setDropdown} /> : null}
     </div>
   )
 }
