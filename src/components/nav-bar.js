@@ -5,12 +5,14 @@ export const Nav = () => {
   const myStyle = {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '5px 10px'
+    padding: '5px 50px',
+    fontSize: '1.6rem',
+    height: '40px',
   }
   return (
-    <div style={myStyle}>
+    <div style={myStyle} className="nav">
       <div>
-        Can You find
+        Can You Find
       </div>
       <div>
         <Link to='/'><button>Play</button></Link>
