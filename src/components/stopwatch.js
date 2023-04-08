@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import '../styles/styles.css'
 
 const Stopwatch = (props) => {
   // state to store time
@@ -22,14 +23,8 @@ const Stopwatch = (props) => {
   // Milliseconds calculation
   const milliseconds = time % 100;
 
-  const myStyle = {
-    position: 'absolute',
-    top: '-42px',
-    left: '50%'
-  }
-
   return (
-    <div className="stopwatch-container" style={myStyle}>
+    <div className="stopwatch-container">
       <p className="stopwatch-time">
         {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}:
