@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export const CharacterDropdown = (props) => {
-  const {top, left, isCorrectGuess} = props
+  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess} = props
 
   const myStyle = {
     position: 'absolute',
@@ -25,21 +25,20 @@ export const CharacterDropdown = (props) => {
   }
 
   const selectChar = async(character) => {
-    if (await isCorrectGuess(character, left, top)) {
-      console.log(character, true)
-    } else {
-      console.log(character, false)
+    if (await isGuessCorrect(character, left, top)) {
+      const index = characters.findIndex(char => char.toLowerCase() === character)
+      const charactersCopy = [...characters]
+      charactersCopy.splice(index, 1)
+     handleCorrectGuess(character, charactersCopy) 
     }
+    setShowDropdown(false)
   }
   return (
     <div>
       <div style={myStyle}>
-
       </div>
       <div style={myStyle2}>
-        <p onClick={() => selectChar('hiei')}>Hiei</p>
-        <p onClick={() => selectChar('vash')}>Vash The Stampede</p>
-        <p onClick={() => selectChar('misaka')}>Misaka</p>
+        {characters.map(character => <p key={character} onClick={() => selectChar(character.toLowerCase())}>{character}</p>)}
       </div>
     </div>
   )
