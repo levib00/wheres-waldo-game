@@ -1,0 +1,47 @@
+.App {
+  background-color: #111;
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #666;
+  height: 40px;
+  padding: 10px 0px;
+}
+.nav {
+  background-color: #666;
+}
+.stopwatch-container {
+  position: absolute;
+  top: -61px;
+  left: 50%;
+  font-size: 22px;
+}
+.checklist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  left: 14px;
+  top: 15px;
+  gap: 5px;
+}
+.check-image {
+  height: 260px;
+  z-index: 0;
+}
+.gray-filter {
+  background-color: rgba(17, 17, 17, 0.80);
+  position: absolute;
+  height: 265px;
+  width: 185px;
+  z-index: 10;
+}
+.check-char {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 280px;
+}
