@@ -19,6 +19,7 @@ export const Game = () => {
     hieiCheck: false,
   })
   const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei'])
+  const [time, setTime] = useState(0);
 
   const firebaseConfig = {
     apiKey: "AIzaSyDs7oKzMuuURyHgIv6rl_u6C_eJT6nfWQc",
@@ -43,10 +44,8 @@ export const Game = () => {
     const dbCoordy2 = coordObj['y-coord-2']
 
     if ((dbCoordx1 < xCoords && xCoords < dbCoordx2) && (dbCoordy1 < yCoords && yCoords < dbCoordy2)) {
-      console.log(true)
       return true
     } else {
-      console.log(false)
       return false
     }
   }
@@ -66,7 +65,6 @@ export const Game = () => {
       const yCoord = mouseCoords[1];
       setDropdown([yCoord, xCoord])
       setShowDropdown(!showDropdown)
-      setTimeout(() => console.log(dropdown), 1000)
     }
   }  
 
@@ -82,8 +80,47 @@ export const Game = () => {
     setCharacters(charactersCopy)   
     setTimeout(() => console.log(charactersCopy), 1000) 
     if (charactersCopy.length === 0) {
-      startAndStop()
+      handleEndGame()
     }
+  }
+
+  const handleEndGame = () => {
+    startAndStop();
+    const isHighscore = checkIsHighscore(time)
+    console.log(isHighscore)
+    if(isHighscore !== false) {
+      popRequestName(time, isHighscore)
+    }
+    
+  }
+
+  const getLeaderboards = async() => {
+    const leaderboardCol = collection(db, `leaderboards`);
+        const leaderboardSnapshot = await getDocs(leaderboardCol);
+        const leaderboards = leaderboardSnapshot.docs.map(doc => doc.data());
+        return leaderboards
+  }
+
+  const popRequestName = (newTime, placement) => {
+    const name = prompt('what is your name')
+    console.log(name, newTime, placement)
+    addToLeaderboards( placement.toString(), newTime, name)
+  }
+  const checkIsHighscore = (newTime) => {
+    const leaderboards = getLeaderboards();
+    for (let i = 0; i < 9; i++) {
+      if (newTime < leaderboards[i] || !leaderboards[i]) {
+        return i + 1
+      }
+    }
+    return false
+  }
+
+  const addToLeaderboards = async(placement, newTime, name) => {
+    await setDoc(doc(db, 'leaderboards', placement), {
+      name: name,
+      time: newTime
+    });
   }
 
   const myStyle = {
@@ -95,7 +132,7 @@ export const Game = () => {
   return (
     <div className="game-container" style={myStyle}>
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
-      <Stopwatch timerIsRunning={timerIsRunning} />
+      <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
       <img style={{width: '78.9vw'}} src={collage} alt="Many anime characters." onClick={handleClick} />
       {showDropdown ? <CharacterDropdown characters={characters} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setDropdown={setDropdown} /> : null}
     </div>
