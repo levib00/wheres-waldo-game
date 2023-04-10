@@ -8,7 +8,9 @@ import { Checklist } from './checklist'
 import Stopwatch from "./stopwatch";
 import { v4 as uuidv4 } from 'uuid';
 
-export const Game = () => {
+export const Game = (props) => {
+  const {getLeaderboards, db} = props
+
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [dropdown, setDropdown] = useState([0, 0])
   const [showDropdown, setShowDropdown] = useState(false)
@@ -20,19 +22,6 @@ export const Game = () => {
   })
   const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei'])
   const [time, setTime] = useState(0);
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDs7oKzMuuURyHgIv6rl_u6C_eJT6nfWQc",
-    authDomain: "can-you-find-10bf9.firebaseapp.com",
-    projectId: "can-you-find-10bf9",
-    storageBucket: "can-you-find-10bf9.appspot.com",
-    messagingSenderId: "438049237266",
-    appId: "1:438049237266:web:affeb0d44a666ef86aabcb"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
 
   const isGuessCorrect = async(whichCharacter, xCoords, yCoords) => {
     const characterCollection = doc(db, 'coordinates', whichCharacter);
@@ -73,54 +62,55 @@ export const Game = () => {
   };
 
   const handleCorrectGuess = (character, charactersCopy) => {
+    if (charactersCopy.length === 0) {
+      handleEndGame()
+    }
     setChecks(prevState => ({
       ...prevState,
       [`${character.toLowerCase()}Check`]: true
     }))
-    setCharacters(charactersCopy)   
-    setTimeout(() => console.log(charactersCopy), 1000) 
-    if (charactersCopy.length === 0) {
-      handleEndGame()
-    }
+    setCharacters(charactersCopy)
   }
 
   const handleEndGame = () => {
     startAndStop();
     const isHighscore = checkIsHighscore(time)
-    console.log(isHighscore)
+    console.log(!!isHighscore)
     if(isHighscore !== false) {
       popRequestName(time, isHighscore)
     }
-    
   }
 
-  const getLeaderboards = async() => {
-    const leaderboardCol = collection(db, `leaderboards`);
-        const leaderboardSnapshot = await getDocs(leaderboardCol);
-        const leaderboards = leaderboardSnapshot.docs.map(doc => doc.data());
-        return leaderboards
-  }
-
-  const popRequestName = (newTime, placement) => {
+  const popRequestName = async(newTime, placement) => {
     const name = prompt('what is your name')
-    console.log(name, newTime, placement)
-    addToLeaderboards( placement.toString(), newTime, name)
+    console.log(name, newTime)
+    addToLeaderboards(newTime, name)
   }
-  const checkIsHighscore = (newTime) => {
-    const leaderboards = getLeaderboards();
-    for (let i = 0; i < 9; i++) {
-      if (newTime < leaderboards[i] || !leaderboards[i]) {
-        return i + 1
+
+  const checkIsHighscore = async(newTime) => {
+    const leaderboards = await getLeaderboards();
+    console.log(leaderboards)
+    for (let i = 0; i < leaderboards.length; i++) {
+      if (!leaderboards[i] || newTime < leaderboards[i]['time']) {
+        return true
       }
     }
     return false
   }
 
-  const addToLeaderboards = async(placement, newTime, name) => {
-    await setDoc(doc(db, 'leaderboards', placement), {
-      name: name,
-      time: newTime
+  const addToLeaderboards = async(newTime, name) => {
+    const leaderboards = await getLeaderboards();
+    leaderboards.push({name: name, time: newTime})
+    console.log(leaderboards)
+    leaderboards.sort(function (a, b) {
+      return a.time - b.time;
     });
+    for (let i = 0; i < leaderboards.length && i < 10; i++) {
+      await setDoc(doc(db, 'leaderboards', i.toString()), {
+        name: leaderboards[i].name,
+        time: leaderboards[i].time
+      });
+    }
   }
 
   const myStyle = {
