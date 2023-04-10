@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import collage from '../assets/images/collage.jpg'
-import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc, collection, getDocs, setDoc } from 'firebase/firestore'
+import { getDoc, doc, setDoc } from 'firebase/firestore'
 import { CharacterDropdown } from "./character-dropdown";
 import { Modal } from "./modal";
 import { Checklist } from './checklist'
 import Stopwatch from "./stopwatch";
-import { v4 as uuidv4 } from 'uuid';
 
 export const Game = (props) => {
   const {getLeaderboards, db} = props
