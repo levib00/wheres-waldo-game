@@ -99,7 +99,6 @@ export const Game = (props) => {
   const addToLeaderboards = async(newTime, name) => {
     const leaderboards = await getLeaderboards();
     leaderboards.push({name: name, time: newTime})
-    console.log(leaderboards)
     leaderboards.sort(function (a, b) {
       return a.time - b.time;
     });
@@ -121,7 +120,7 @@ export const Game = (props) => {
     <div className="game-container" style={myStyle}>
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
-      <img style={{width: '78.9vw'}} src={collage} alt="Many anime characters." onClick={handleClick} />
+      <img className="game-image" src={collage} alt="Many anime characters." onClick={handleClick} />
       {showDropdown ? <CharacterDropdown characters={characters} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setDropdown={setDropdown} /> : null}
     </div>
   )
