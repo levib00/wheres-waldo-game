@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import hiei from '../assets/images/hiei.png'
 import vash from '../assets/images/vash1.png'
 import misaka from '../assets/images/misaka.png'
