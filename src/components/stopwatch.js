@@ -3,7 +3,7 @@ import '../styles/styles.css'
 
 const Stopwatch = (props) => {
   // state to store time
-  const [time, setTime] = useState(0);
+  const {time, setTime} = props
 
   useEffect(() => {
     let intervalId;
