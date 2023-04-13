@@ -4,6 +4,7 @@ import { getDoc, doc, setDoc } from 'firebase/firestore'
 import { CharacterDropdown } from "./character-dropdown";
 import { Modal } from "./modal";
 import { Checklist } from './checklist'
+import { SubmissionModal } from "./submission-modal";
 import Stopwatch from "./stopwatch";
 
 export const Game = (props) => {
@@ -20,6 +21,7 @@ export const Game = (props) => {
   })
   const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei'])
   const [time, setTime] = useState(0);
+  const [gameOver, setGameOver] = useState(false)
 
   const isGuessCorrect = async(whichCharacter, xCoords, yCoords) => {
     const characterCollection = doc(db, 'coordinates', whichCharacter);
@@ -70,19 +72,11 @@ export const Game = (props) => {
     setCharacters(charactersCopy)
   }
 
-  const handleEndGame = () => {
+  const handleEndGame = async() => {
     startAndStop();
-    const isHighscore = checkIsHighscore(time)
-    console.log(!!isHighscore)
-    if(isHighscore !== false) {
-      popRequestName(time, isHighscore)
-    }
-  }
-
-  const popRequestName = async(newTime, placement) => {
-    const name = prompt('what is your name')
-    console.log(name, newTime)
-    addToLeaderboards(newTime, name)
+    setGameOver(true)
+    const isHighscore = await checkIsHighscore(time)
+    setGameOver(<SubmissionModal time={time} submitTime={addToLeaderboards} isHighscore={isHighscore} />)
   }
 
   const checkIsHighscore = async(newTime) => {
@@ -118,6 +112,7 @@ export const Game = (props) => {
   
   return (
     <div className="game-container" style={myStyle}>
+      {gameOver ? gameOver : null}
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
       <img className="game-image" src={collage} alt="Many anime characters." onClick={handleClick} />
