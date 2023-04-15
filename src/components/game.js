@@ -23,10 +23,14 @@ export const Game = (props) => {
   const [time, setTime] = useState(0);
   const [gameOver, setGameOver] = useState(false)
 
-  const isGuessCorrect = async(whichCharacter, xCoords, yCoords) => {
+  const getCharCoords = async(whichCharacter) => {
     const characterCollection = doc(db, 'coordinates', whichCharacter);
     const characterSnapshot = await getDoc(characterCollection);
-    const coordObj = characterSnapshot.data();
+    characterSnapshot.data();
+    return characterSnapshot.data();
+  }
+
+  const isGuessCorrect = async(xCoords, yCoords, coordObj) => {
     const dbCoordx1 = coordObj['x-coord-1']
     const dbCoordx2 = coordObj['x-coord-2']
     const dbCoordy1 = coordObj['y-coord-1']
@@ -81,7 +85,6 @@ export const Game = (props) => {
 
   const checkIsHighscore = async(newTime) => {
     const leaderboards = await getLeaderboards();
-    console.log(leaderboards)
     for (let i = 0; i < leaderboards.length; i++) {
       if (!leaderboards[i] || newTime < leaderboards[i]['time']) {
         return true
@@ -116,7 +119,7 @@ export const Game = (props) => {
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
       <img className="game-image" src={collage} alt="Many anime characters." onClick={handleClick} />
-      {showDropdown ? <CharacterDropdown characters={characters} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setDropdown={setDropdown} /> : null}
+      {showDropdown ? <CharacterDropdown characters={characters} getCharCoords={getCharCoords} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setDropdown={setDropdown} /> : null}
     </div>
   )
 }
