@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
 export const CharacterDropdown = (props) => {
-  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess} = props
+  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess, getCharCoords} = props
 
   const myStyle = {
     position: 'absolute',
@@ -25,11 +25,13 @@ export const CharacterDropdown = (props) => {
   }
 
   const selectChar = async(character) => {
-    if (await isGuessCorrect(character, left, top)) {
+    const charCoords = await getCharCoords(character)
+    console.log(charCoords)
+    if (await isGuessCorrect(left, top, charCoords)) {
       const index = characters.findIndex(char => char.toLowerCase() === character)
       const charactersCopy = [...characters]
       charactersCopy.splice(index, 1)
-     handleCorrectGuess(character, charactersCopy) 
+      handleCorrectGuess(character, charactersCopy) 
     }
     setShowDropdown(false)
   }
