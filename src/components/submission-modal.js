@@ -16,6 +16,7 @@ export const SubmissionModal = (props) => {
   }
 
   const newHighScore = (isHighscore) => {
+    // Display a modal that asks for a name if your time is a new high score.
     if (isHighscore) {
       return (
         <div className="modal" id="submission-modal">
@@ -32,6 +33,7 @@ export const SubmissionModal = (props) => {
         </div>
       )
     } else {
+      // Display a message that doesn't ask for your name if you don't get a new high score.
       return (
         <div className="modal" id="submission-modal">
           <p className="end-message">Great try!</p>
@@ -47,6 +49,7 @@ export const SubmissionModal = (props) => {
   }
 
   const handleClick = (time, name) => {
+    // Submit time and change modal contents to a link to the leaderboards page.
     submitTime(time, name);
     changeContents();
   }

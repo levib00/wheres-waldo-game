@@ -7,6 +7,7 @@ export const Modal = (props) => {
   const {startTimer, setShow} = props;
 
   const handleClick = () => {
+    // Starts game
     startTimer()
     setShow(false)
   }

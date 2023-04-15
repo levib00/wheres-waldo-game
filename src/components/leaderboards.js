@@ -6,6 +6,7 @@ export const LeaderBoards = (props) => {
   const [leaderboards, setLeaderboards] = useState([])
 
   useEffect(() => {
+    // Gets leaderboards then set them in state to be displayed
     getLeaderboards().then((leaderboards) => setLeaderboards(leaderboards));
   }, [getLeaderboards]);
 

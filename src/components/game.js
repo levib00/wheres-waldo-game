@@ -11,19 +11,20 @@ export const Game = (props) => {
   const {getLeaderboards, db} = props
 
   const [timerIsRunning, setTimerIsRunning] = useState(false);
-  const [dropdown, setDropdown] = useState([0, 0])
-  const [showDropdown, setShowDropdown] = useState(false)
-  const [show, setShow] = useState(true)
+  const [dropdown, setDropdown] = useState([0, 0]) // Coordinates for where the dropdown is placed.
+  const [showDropdown, setShowDropdown] = useState(false) // Controls whether dropdown shows or not.
+  const [show, setShow] = useState(true) // Controls whether start game modal shows.
   const [checks, setChecks] = useState({
     misakaCheck: false,
     vashCheck: false,
     hieiCheck: false,
-  })
-  const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei'])
+  }) // Controls whether checklist items are greyed out or not.
+  const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei']) // Which characters are in dropdown.
   const [time, setTime] = useState(0);
-  const [gameOver, setGameOver] = useState(false)
+  const [gameOver, setGameOver] = useState(false) // Controls whether the end game modal shows.
 
-  const getCharCoords = async(whichCharacter) => {
+  const getCharCoords = async(whichCharacter) => { 
+    // Gets coordinates for character chosen from dropdown.
     const characterCollection = doc(db, 'coordinates', whichCharacter);
     const characterSnapshot = await getDoc(characterCollection);
     characterSnapshot.data();
@@ -31,6 +32,7 @@ export const Game = (props) => {
   }
 
   const isGuessCorrect = async(xCoords, yCoords, coordObj) => {
+    // Checks whether the coordinates of the user click is within acceptable area for the chosen character.
     const dbCoordx1 = coordObj['x-coord-1']
     const dbCoordx2 = coordObj['x-coord-2']
     const dbCoordy1 = coordObj['y-coord-1']
@@ -52,6 +54,7 @@ export const Game = (props) => {
   }
 
   const handleClick = async(e) => {
+    // Gets mouse coordinates then passes the coordinates to place the dropdown.
     if (!show) {
       const mouseCoords = getMousePos(e);
       const xCoord = mouseCoords[0];
@@ -62,28 +65,30 @@ export const Game = (props) => {
   }  
 
   const startAndStop = () => {
+    // starts and stops the stopwatch
     setTimerIsRunning(!timerIsRunning);
   };
 
   const handleCorrectGuess = (character, charactersCopy) => {
     if (charactersCopy.length === 0) {
+      // If there are no more characters in the list handle end game
       handleEndGame()
     }
     setChecks(prevState => ({
       ...prevState,
       [`${character.toLowerCase()}Check`]: true
-    }))
+    })) // add grey out to the character in the checklist.
     setCharacters(charactersCopy)
   }
 
   const handleEndGame = async() => {
-    startAndStop();
-    setGameOver(true)
+    startAndStop(); // Stop the timer.
     const isHighscore = await checkIsHighscore(time)
-    setGameOver(<SubmissionModal time={time} submitTime={addToLeaderboards} isHighscore={isHighscore} />)
+    setGameOver(<SubmissionModal time={time} submitTime={addToLeaderboards} isHighscore={isHighscore} />) // Show the game over modal.
   }
 
   const checkIsHighscore = async(newTime) => {
+    // Check to see if the time is a top 10 time.
     const leaderboards = await getLeaderboards();
     for (let i = 0; i < leaderboards.length; i++) {
       if (!leaderboards[i] || newTime < leaderboards[i]['time']) {
@@ -94,9 +99,10 @@ export const Game = (props) => {
   }
 
   const addToLeaderboards = async(newTime, name) => {
+    // Add new times to the leaderboards
     const leaderboards = await getLeaderboards();
     leaderboards.push({name: name, time: newTime})
-    leaderboards.sort(function (a, b) {
+    leaderboards.sort(function (a, b) { // Sorts times for leaderboards
       return a.time - b.time;
     });
     for (let i = 0; i < leaderboards.length && i < 10; i++) {

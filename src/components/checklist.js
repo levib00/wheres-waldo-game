@@ -4,6 +4,7 @@ import vash from '../assets/images/vash1.png'
 import hiei from '../assets/images/hiei.png'
 
 export const Checklist = (props) => {
+  // shows character images on the side, grays out once they've been found.
   const { misakaCheck, vashCheck, hieiCheck } = props.checks
   return (
     <div className="checklist">

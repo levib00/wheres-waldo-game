@@ -25,15 +25,14 @@ export const CharacterDropdown = (props) => {
   }
 
   const selectChar = async(character) => {
-    const charCoords = await getCharCoords(character)
-    console.log(charCoords)
-    if (await isGuessCorrect(left, top, charCoords)) {
+    const charCoords = await getCharCoords(character) // Get coordinates for chosen character from database
+    if (await isGuessCorrect(left, top, charCoords)) { // Check to see if user clicked within those acceptable coordinates
       const index = characters.findIndex(char => char.toLowerCase() === character)
       const charactersCopy = [...characters]
-      charactersCopy.splice(index, 1)
-      handleCorrectGuess(character, charactersCopy) 
+      charactersCopy.splice(index, 1) // Remove correct character from the dropdown
+      handleCorrectGuess(character, charactersCopy)
     }
-    setShowDropdown(false)
+    setShowDropdown(false) // Unmount dropdown
   }
   return (
     <div>
