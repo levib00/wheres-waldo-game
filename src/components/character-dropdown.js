@@ -1,7 +1,8 @@
 import React from "react";
+import { Message } from "./message";
 
 export const CharacterDropdown = (props) => {
-  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess, getCharCoords} = props
+  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess, getCharCoords, setShowMessage} = props
 
   const myStyle = {
     position: 'absolute',
@@ -26,12 +27,15 @@ export const CharacterDropdown = (props) => {
 
   const selectChar = (character) => {
     const charCoords = getCharCoords(character) // Get coordinates for chosen character from database
-    if (isGuessCorrect(left, top, charCoords)) { // Check to see if user clicked within those acceptable coordinates
+    const isCorrect = isGuessCorrect(left, top, charCoords)
+    if (isCorrect) { // Check to see if user clicked within those acceptable coordinates
       const index = characters.findIndex(char => char.toLowerCase() === character)
       const charactersCopy = [...characters]
       charactersCopy.splice(index, 1) // Remove correct character from the dropdown
       handleCorrectGuess(character, charactersCopy)
     }
+    setShowMessage(<Message isCorrect={isCorrect} />)
+    setTimeout(() => setShowMessage(false), 1000)
     setShowDropdown(false) // Unmount dropdown
   }
   return (
