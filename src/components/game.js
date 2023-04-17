@@ -125,7 +125,7 @@ export const Game = (props) => {
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
       <img className="game-image" src={collage} alt="Many anime characters." onClick={handleClick} />
-      {showDropdown ? <CharacterDropdown characters={characters} getCharCoords={getCharCoords} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setDropdown={setDropdown} /> : null}
+      {showDropdown ? <CharacterDropdown characters={characters} getCharCoords={getCharCoords} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} /> : null}
     </div>
   )
 }
