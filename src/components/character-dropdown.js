@@ -24,9 +24,9 @@ export const CharacterDropdown = (props) => {
     backgroundColor: 'grey',
   }
 
-  const selectChar = async(character) => {
-    const charCoords = await getCharCoords(character) // Get coordinates for chosen character from database
-    if (await isGuessCorrect(left, top, charCoords)) { // Check to see if user clicked within those acceptable coordinates
+  const selectChar = (character) => {
+    const charCoords = getCharCoords(character) // Get coordinates for chosen character from database
+    if (isGuessCorrect(left, top, charCoords)) { // Check to see if user clicked within those acceptable coordinates
       const index = characters.findIndex(char => char.toLowerCase() === character)
       const charactersCopy = [...characters]
       charactersCopy.splice(index, 1) // Remove correct character from the dropdown
