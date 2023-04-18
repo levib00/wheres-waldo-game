@@ -1,9 +1,8 @@
 import React from "react";
-import { Message } from "./message";
 
 export const CharacterDropdown = (props) => {
-  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess, getCharCoords, setShowMessage} = props
-
+  const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess, getCharCoords, setIsMounted, setIsCorrect} = props
+  
   const myStyle = {
     position: 'absolute',
     top: top - 75,
@@ -27,15 +26,16 @@ export const CharacterDropdown = (props) => {
 
   const selectChar = async(character) => {
     const charCoords = await getCharCoords(character) // Get coordinates for chosen character from database
-    const isCorrect = await isGuessCorrect(left, top, charCoords)
+    const isCorrect = await isGuessCorrect(left, top, charCoords) // TODO: want to change this so i only call the database once on load, then just use an object in place of calling this every time. should speed up guessing significantly
+    setIsCorrect(isCorrect)
     if (isCorrect) { // Check to see if user clicked within those acceptable coordinates
       const index = characters.findIndex(char => char.toLowerCase() === character)
       const charactersCopy = [...characters]
       charactersCopy.splice(index, 1) // Remove correct character from the dropdown
       handleCorrectGuess(character, charactersCopy)
     }
-    setShowMessage(<Message isCorrect={isCorrect} />)
-    setTimeout(() => setShowMessage(false), 1000)
+    setIsMounted(true)
+    setTimeout(() => setIsMounted(false), 1000)
     setShowDropdown(false) // Unmount dropdown
   }
   return (
