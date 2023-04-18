@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import collage from '../assets/images/collage.jpg'
 import { getDoc, doc, setDoc } from 'firebase/firestore'
 import { CharacterDropdown } from "./character-dropdown";
 import { Modal } from "./modal";
 import { Checklist } from './checklist'
 import { SubmissionModal } from "./submission-modal";
+import { Message } from "./message";
 import Stopwatch from "./stopwatch";
 
 export const Game = (props) => {
@@ -22,12 +23,13 @@ export const Game = (props) => {
   const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei']) // Which characters are in dropdown.
   const [time, setTime] = useState(0);
   const [gameOver, setGameOver] = useState(false) // Controls whether the end game modal shows.
+  const [isCorrect, setIsCorrect] = useState(null)
+  const [isMounted, setIsMounted] = useState(false)
 
   const getCharCoords = async(whichCharacter) => { 
     // Gets coordinates for character chosen from dropdown.
     const characterCollection = doc(db, 'coordinates', whichCharacter);
     const characterSnapshot = await getDoc(characterCollection);
-    characterSnapshot.data();
     return characterSnapshot.data();
   }
 
@@ -73,7 +75,7 @@ export const Game = (props) => {
     if (charactersCopy.length === 0) {
       // If there are no more characters in the list handle end game
       handleEndGame()
-    }
+    } 
     setChecks(prevState => ({
       ...prevState,
       [`${character.toLowerCase()}Check`]: true
@@ -122,10 +124,11 @@ export const Game = (props) => {
   return (
     <div className="game-container" style={myStyle}>
       {gameOver ? gameOver : null}
+      <Message isCorrect={isCorrect} isMounted={isMounted} />
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
       <img className="game-image" src={collage} alt="Many anime characters." onClick={handleClick} />
-      {showDropdown ? <CharacterDropdown characters={characters} getCharCoords={getCharCoords} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} /> : null}
+      {showDropdown ? <CharacterDropdown characters={characters} getCharCoords={getCharCoords} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setIsMounted={setIsMounted} setIsCorrect={setIsCorrect}/> : null}
     </div>
   )
 }
