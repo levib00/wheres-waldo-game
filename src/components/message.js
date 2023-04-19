@@ -5,13 +5,19 @@ import { motion, AnimatePresence } from "framer-motion"
 
 export const Message = (props) => {
   // 
-  const { isCorrect, isMounted } = props
+  const { isCorrect, isMounted, testMessage = false } = props
   const [message, setMessage] = useState()
   const [isCorrectSymbol, setIsCorrectSymbol] = useState()
 
-  const isVisible = isMounted
-
   useEffect(() => {
+    console.log(testMessage)
+    if(testMessage) {
+      if (isCorrect){ 
+        setMessage('right')
+      } else { 
+        setMessage('wrong')
+      }
+    } else {
     const correctMessages = ['Nice!', 'You got one!', 'Right on!', 'That\'s right!', 'You found one!', 'Good Work!', 'Perfect!']
     const incorrectMessages = ['Nope!', 'Try again!', 'Not there!', 'Not this time!', 'Not quite!', 'Keep Trying!']
     const generateMessage = (isCorrect) => {
@@ -22,12 +28,28 @@ export const Message = (props) => {
       }
     }
     setMessage(generateMessage(isCorrect))
+    }
     setIsCorrectSymbol(isCorrect ? check : redx)
+    
   }, [isCorrect])
   
   return (
+    <div>
+      {
+      testMessage ? 
+      <div>
+      { isMounted && 
+        <div className={`message`}>
+          <div className="message-content">
+            <img src={isCorrectSymbol} alt={isCorrect ? 'check mark' : 'red X'} className="message-image"/>
+            <p>{message}</p>
+          </div>
+        </div>
+      }
+    </div>
+    :
     <AnimatePresence>
-      { isVisible && 
+      { isMounted && 
         <motion.div
         className={`message`}
         initial={{ y: -39 }}
@@ -39,11 +61,13 @@ export const Message = (props) => {
           ease: [0, 0.71, 0.2, 1.01]
         }}>
           <div className="message-content">
-            <img src={isCorrectSymbol} alt="checkmark" className="message-image"/>
+            <img src={isCorrectSymbol} alt={isCorrect ? 'check mark' : 'red X'} className="message-image"/>
             <p>{message}</p>
           </div>
         </motion.div>
       }
     </AnimatePresence>
+      }
+    </div>
   )
 }
