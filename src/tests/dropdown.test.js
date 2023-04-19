@@ -3,7 +3,6 @@ import React from "react";
 import { getByRole, render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { getValue } from "@testing-library/user-event/dist/utils";
 import { CharacterDropdown } from "../components/character-dropdown";
 
 describe("Test guessing", () => {
@@ -25,12 +24,12 @@ describe("Test guessing", () => {
       }
     }
 
-    render(<CharacterDropdown characters={['Misaka']} getCharCoords={() => ({x1:0, x2:2, y1:0, y2:2})} handleCorrectGuess={(mockCorrectFn)} top={1} left={1} isGuessCorrect={isGuessCorrect} setShowDropdown={mockCloseFn} setShowMessage={() => null} /> )
+    render(<CharacterDropdown characters={['Misaka']} handleCorrectGuess={mockCorrectFn} top={1} left={1} isGuessCorrect={isGuessCorrect} setShowDropdown={mockCloseFn} setIsMounted={() => null} setIsCorrect={() => null} charCoords={{misaka:{x1:0, x2:2, y1:0, y2:2}}}/> )
     const Misaka = screen.getByText('Misaka');
     act(() => {
       userEvent.click(Misaka)
     });
-    await new Promise(process.nextTick);
+      await new Promise(process.nextTick);
       expect(mockCorrectFn).toBeCalledTimes(1)
       expect(mockCloseFn).toBeCalledTimes(1)
     
@@ -51,7 +50,7 @@ describe("Test guessing", () => {
       }
     }
 
-    render(<CharacterDropdown characters={['Misaka']} getCharCoords={() => ({x1:0, x2:2, y1:0, y2:2})} handleCorrectGuess={(mockCorrectFn)} top={5} left={5} isGuessCorrect={isGuessCorrect} setShowDropdown={mockCloseFn} setShowMessage={() => null} /> )
+    render(<CharacterDropdown characters={['Misaka']} handleCorrectGuess={mockCorrectFn} top={5} left={5} isGuessCorrect={isGuessCorrect} setShowDropdown={mockCloseFn} setIsMounted={() => null} setIsCorrect={() => null} charCoords={{misaka:{x1:0, x2:2, y1:0, y2:2}}}/> )
     const Misaka = screen.getByText('Misaka');
     act(() => {
       userEvent.click(Misaka)
