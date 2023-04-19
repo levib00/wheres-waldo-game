@@ -35,7 +35,7 @@ describe('Interacting with the game board', () => {
     expect(screen.getByText('Vash')).toBeInTheDocument()
   });
 
-  it.only('Dropdown disappears when game is clicked again', () => {
+  it('Dropdown disappears when game is clicked again', () => {
     render(<Game getLeaderboards={[]} db={[]} />);
     const incrementBtn = screen.getByRole('button', {name: 'Start Game'});
     act(() => {
