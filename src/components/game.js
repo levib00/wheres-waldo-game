@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import collage from '../assets/images/collage.jpg'
-import { getDoc, doc, setDoc } from 'firebase/firestore'
+import { getDoc, getDocs, doc, setDoc, collection } from 'firebase/firestore'
 import { CharacterDropdown } from "./character-dropdown";
 import { Modal } from "./modal";
 import { Checklist } from './checklist'
@@ -25,13 +25,29 @@ export const Game = (props) => {
   const [gameOver, setGameOver] = useState(false) // Controls whether the end game modal shows.
   const [isCorrect, setIsCorrect] = useState(null)
   const [isMounted, setIsMounted] = useState(false)
+  const [charCoords, setCharCoords] = useState()
 
-  const getCharCoords = async(whichCharacter) => { 
+  const getCharCoords = async() => { 
     // Gets coordinates for character chosen from dropdown.
-    const characterCollection = doc(db, 'coordinates', whichCharacter);
-    const characterSnapshot = await getDoc(characterCollection);
-    return characterSnapshot.data();
+    const characterCollection = collection(db, 'coordinates');
+    const characterSnapshot = await getDocs(characterCollection);
+    const coordObj = {}
+    characterSnapshot.docs.forEach( doc => {
+      coordObj[doc.id] = doc.data()
+    })
+    return coordObj
   }
+
+  useEffect(() => {
+    const characterSetter = async() => {
+      try {
+        setCharCoords(await getCharCoords())
+      } catch(error) {
+        console.error(error)
+      }
+    }
+    characterSetter()
+  }, [])
 
   const isGuessCorrect = async(xCoords, yCoords, coordObj) => {
     // Checks whether the coordinates of the user click is within acceptable area for the chosen character.
@@ -128,7 +144,7 @@ export const Game = (props) => {
       {show ? <Modal startTimer={startAndStop} setShow={setShow}/> : <Checklist checks={checks}/>}
       <Stopwatch timerIsRunning={timerIsRunning} time={time} setTime={setTime}/>
       <img className="game-image" src={collage} alt="Many anime characters." onClick={handleClick} />
-      {showDropdown ? <CharacterDropdown characters={characters} getCharCoords={getCharCoords} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setIsMounted={setIsMounted} setIsCorrect={setIsCorrect}/> : null}
+      {showDropdown ? <CharacterDropdown characters={characters} handleCorrectGuess={handleCorrectGuess} top={dropdown[0]} left={dropdown[1]} isGuessCorrect={isGuessCorrect} setShowDropdown={setShowDropdown} setIsMounted={setIsMounted} setIsCorrect={setIsCorrect} charCoords={charCoords}/> : null}
     </div>
   )
 }
