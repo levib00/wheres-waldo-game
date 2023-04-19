@@ -29,6 +29,7 @@
   align-items: center;
   padding: 0 50px;
   height: 50px;
+  z-index: 1;
 }
 .nav-button {
   height: 50px;
@@ -50,9 +51,15 @@
 }
 .stopwatch-container {
   position: absolute;
-  top: -61px;
-  left: 50%;
-  font-size: 22px;
+  width: 120px;
+  height: 50px;
+  top: -50px;
+  left: calc(50% - 60px);
+  font-size: 24px;
+  z-index: 22;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .checklist {
   display: flex;
@@ -156,3 +163,25 @@
 .end-message {
   margin: 0px;
 }
+.message {
+  position: absolute;
+  background-color: #111111bd;
+  width: auto;
+  padding: 4px;
+  height: 30px;
+  justify-self: center;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+  z-index: 0;
+}
+.message-image {
+  height: 22px;
+}
+.message-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+}
+
