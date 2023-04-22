@@ -14,7 +14,7 @@
   overflow-y: hidden;
 }
 .hero {
-  font-size: 26px;
+  font-size: 1.625rem;
   border: none;
   color: var(--text-color);
   background-color: inherit;
@@ -26,8 +26,8 @@
   align-items: center;
   background-color: var(--primary-color);
   color: var(--text-color);
-  height: 40px;
-  padding: 10px 0px;
+  height: 2.5rem;
+  padding: 0.625rem 0px;
   font-size: 20px;
   box-shadow: #000 0px 0px 5px 1px;
   z-index: 22;
@@ -47,8 +47,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px;
-  height: 50px;
+  padding: 0 3.125rem;
+  height: 3.125rem;
   z-index: 1;
   box-shadow: #000 0px 0px 5px 1px;
 }
