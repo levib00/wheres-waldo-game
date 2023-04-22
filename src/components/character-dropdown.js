@@ -4,24 +4,13 @@ export const CharacterDropdown = (props) => {
   const {top, left, isGuessCorrect, setShowDropdown, characters, handleCorrectGuess, setIsMounted, setIsCorrect, charCoords} = props
   
   const myStyle = {
-    position: 'absolute',
     top: top - 75,
     left: left -75,
-    border: 'red 5px solid',
-    color: 'yellow',
-    height: '150px',
-    width: '150px'
   }
 
   const myStyle2 = {
-    position: 'absolute',
-    top: top + 45,
-    left: left + 79,
-    border: 'red 5px solid',
-    color: 'yellow',
-    height: '150px',
-    width: '150px',
-    backgroundColor: 'grey',
+    top: top - 75,
+    left: left + 91,
   }
 
   const selectChar = async(character) => {
@@ -34,17 +23,19 @@ export const CharacterDropdown = (props) => {
       charactersCopy.splice(index, 1) // Remove correct character from the dropdown
       handleCorrectGuess(character, charactersCopy)
     }
-    setIsMounted(true)
+    setIsMounted(true) //Mounts then unmounts message.
     setTimeout(() => setIsMounted(false), 1000)
     setShowDropdown(false) // Unmount dropdown
   }
 
   return (
     <div>
-      <div style={myStyle}>
+      <div className="target-box drop-down" style={myStyle}>
       </div>
-      <div style={myStyle2}>
-        {characters.map(character => <p key={character} onClick={() => selectChar(character.toLowerCase())}>{character}</p>)}
+      <div className="drop-down drop-down-list" style={myStyle2}>
+        <div className="character-container">
+          {characters.map(character => <p className="character-name" key={character} onClick={() => selectChar(character.toLowerCase())}>{character}</p>)}
+        </div>
       </div>
     </div>
   )
