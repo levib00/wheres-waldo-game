@@ -15,20 +15,20 @@ export const Modal = (props) => {
   return (
     <div className="modal">
       <div>
-        <div style={{display: 'flex', alignItems: 'center', margin: '5px'}}>
-          <div style={{width: '130px', display: 'flex', justifyContent: 'center'}}>
+        <div className="modal-item">
+          <div className="modal-image-container">
             <img className="modal-image" src={misaka} alt="Misaka example"/>
           </div>
           <p>Misaka from A Certain Scientific Railgun</p>
         </div>
-        <div style={{display: 'flex', alignItems: 'center', margin: '5px'}}>
-          <div style={{width: '130px', display: 'flex', justifyContent: 'center'}}>
+        <div className="modal-item">
+          <div className="modal-image-container">
             <img className="modal-image" src={vash} alt="Vash the Stampede example"/>
           </div>
           <p>Vash the Stampede from Trigun</p>
         </div>
-        <div style={{display: 'flex', alignItems: 'center', margin: '5px'}}>
-          <div style={{width: '130px', display: 'flex', justifyContent: 'center'}}>
+        <div className="modal-item">
+          <div className="modal-image-container">
             <img className="modal-image" src={hiei} alt="Hiei example"/>
           </div>
           <p>Hiei from Yu Yu Hakusho</p>
