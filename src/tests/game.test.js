@@ -1,11 +1,9 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import React from "react";
-import { getByRole, render, screen, act } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { getValue } from "@testing-library/user-event/dist/utils";
 import { Game } from "../components/game";
-import { Modal } from "../components/modal";
 
 describe("Test game starting", () => {
   it('Test start game button.', () => {
