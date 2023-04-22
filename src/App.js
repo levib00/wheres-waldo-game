@@ -5,7 +5,7 @@ import { Nav } from './components/nav-bar'
 import { LeaderBoards } from "./components/leaderboards";
 import { Footer } from "./components/footer";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc, collection, getDocs, setDoc } from 'firebase/firestore'
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
 import './styles/styles.css'
  
 const App = () => {
