@@ -9,7 +9,7 @@ export const Nav = () => {
       </div>
       <div className="nav-button-container">
         <Link to='/'><button className="nav-button">Play</button></Link>
-        <Link to='/leaderboards'><button className="nav-button">Leaderboards</button></Link>
+        <Link to='/leaderboards'><button className="nav-button">Top 10</button></Link>
       </div>
     </div>
   )
