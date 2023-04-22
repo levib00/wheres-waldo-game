@@ -4,14 +4,13 @@ import redx from '../assets/images/redx.png'
 import { motion, AnimatePresence } from "framer-motion"
 
 export const Message = (props) => {
-  // 
+  // Creates a small message at the top of the screen to tell the user if they were correct.
   const { isCorrect, isMounted, testMessage = false } = props
   const [message, setMessage] = useState()
   const [isCorrectSymbol, setIsCorrectSymbol] = useState()
 
   useEffect(() => {
-    console.log(testMessage)
-    if(testMessage) {
+    if(testMessage) { // this is just for testing purposes
       if (isCorrect){ 
         setMessage('right')
       } else { 
@@ -21,20 +20,24 @@ export const Message = (props) => {
     const correctMessages = ['Nice!', 'You got one!', 'Right on!', 'That\'s right!', 'You found one!', 'Good Work!', 'Perfect!']
     const incorrectMessages = ['Nope!', 'Try again!', 'Not there!', 'Not this time!', 'Not quite!', 'Keep Trying!']
     const generateMessage = (isCorrect) => {
-      if (isCorrect) {
-        return correctMessages[Math.floor(Math.random() * correctMessages.length)]
-      } else {
+      if (isCorrect) { // If guess is correct, pull a message saying they got it right and set image to green check
+        setIsCorrectSymbol(check)
+        return correctMessages[Math.floor(Math.random() * correctMessages.length)] 
+      } else { // Else tell them they got it wrong and set image to red x
+        setIsCorrectSymbol(redx)
         return incorrectMessages[Math.floor(Math.random() * incorrectMessages.length)]
       }
     }
     setMessage(generateMessage(isCorrect))
     }
-    setIsCorrectSymbol(isCorrect ? check : redx)
-    
-  }, [isCorrect])
+  }, [isCorrect, testMessage])
   
   return (
-    <div>
+    <div className="message-container">
+      {/* 
+      Framer motion causes issues with testing so this will have to be kept in 
+      sync with the other JSX below in order to maintain test accuracy.
+      */}
       {
       testMessage ? 
       <div>
@@ -50,7 +53,7 @@ export const Message = (props) => {
     :
     <AnimatePresence>
       { isMounted && 
-        <motion.div
+        <motion.div // Framer motion is use to animate the message translating down from the top of the screen then back up.
         className={`message`}
         initial={{ y: -39 }}
         whileInView={{ y: 30 }}
