@@ -13,7 +13,7 @@ export const Game = (props) => {
 
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [dropdown, setDropdown] = useState([0, 0]) // Coordinates for where the dropdown is placed.
-  const [showDropdown, setShowDropdown] = useState(false) // Controls whether dropdown shows or not.
+  const [showDropdown, setShowDropdown] = useState(false) // Controls whether dropdown shows.
   const [show, setShow] = useState(true) // Controls whether start game modal shows.
   const [checks, setChecks] = useState({
     misakaCheck: false,
@@ -23,9 +23,9 @@ export const Game = (props) => {
   const [characters, setCharacters] = useState(['Misaka', 'Vash', 'Hiei']) // Which characters are in dropdown.
   const [time, setTime] = useState(0);
   const [gameOver, setGameOver] = useState(false) // Controls whether the end game modal shows.
-  const [isCorrect, setIsCorrect] = useState(null)
-  const [isMounted, setIsMounted] = useState(false)
-  const [charCoords, setCharCoords] = useState()
+  const [isCorrect, setIsCorrect] = useState(null) // Passed to message to tell it which message to display
+  const [isMounted, setIsMounted] = useState(false) // Controls whether message shows
+  const [charCoords, setCharCoords] = useState() // Holds coordinates of characters once they are pulled from the database.
 
   
 
@@ -75,7 +75,7 @@ export const Game = (props) => {
 
   const handleClick = async(e) => {
     // Gets mouse coordinates then passes the coordinates to place the dropdown.
-    if (!show) {
+    if (!show && !gameOver) {
       const mouseCoords = getMousePos(e);
       const xCoord = mouseCoords[0];
       const yCoord = mouseCoords[1];
