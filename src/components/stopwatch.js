@@ -12,7 +12,7 @@ const Stopwatch = (props) => {
       intervalId = setInterval(() => setTime(time + 1), 10);
     }
     return () => clearInterval(intervalId);
-  }, [props.timerIsRunning, time]);
+  }, [props.timerIsRunning, time, setTime]);
 
   // Minutes calculation
   const minutes = Math.floor(time / 6000);
