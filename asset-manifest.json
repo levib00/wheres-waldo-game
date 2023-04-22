@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/wheres-waldo-game/static/css/main.267f1e0b.css",
+    "main.css": "/wheres-waldo-game/static/css/main.d5683de0.css",
     "main.js": "/wheres-waldo-game/static/js/main.1a5f5844.js",
     "static/media/collage.jpg": "/wheres-waldo-game/static/media/collage.81e70a5a0a47b16914b4.jpg",
     "static/media/hiei.png": "/wheres-waldo-game/static/media/hiei.79c97b9f2c1ecf57132c.png",
@@ -9,11 +9,11 @@
     "static/media/checkmark.png": "/wheres-waldo-game/static/media/checkmark.e96371346d0fff611fbc.png",
     "static/media/redx.png": "/wheres-waldo-game/static/media/redx.7e6781e333db65faa551.png",
     "index.html": "/wheres-waldo-game/index.html",
-    "main.267f1e0b.css.map": "/wheres-waldo-game/static/css/main.267f1e0b.css.map",
+    "main.d5683de0.css.map": "/wheres-waldo-game/static/css/main.d5683de0.css.map",
     "main.1a5f5844.js.map": "/wheres-waldo-game/static/js/main.1a5f5844.js.map"
   },
   "entrypoints": [
-    "static/css/main.267f1e0b.css",
+    "static/css/main.d5683de0.css",
     "static/js/main.1a5f5844.js"
   ]
 }
