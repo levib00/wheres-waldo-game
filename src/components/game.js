@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import collage from '../assets/images/collage.jpg'
-import { getDoc, getDocs, doc, setDoc, collection } from 'firebase/firestore'
+import { getDocs, doc, setDoc, collection } from 'firebase/firestore'
 import { CharacterDropdown } from "./character-dropdown";
 import { Modal } from "./modal";
 import { Checklist } from './checklist'
@@ -27,18 +27,20 @@ export const Game = (props) => {
   const [isMounted, setIsMounted] = useState(false)
   const [charCoords, setCharCoords] = useState()
 
-  const getCharCoords = async() => { 
-    // Gets coordinates for character chosen from dropdown.
-    const characterCollection = collection(db, 'coordinates');
-    const characterSnapshot = await getDocs(characterCollection);
-    const coordObj = {}
-    characterSnapshot.docs.forEach( doc => {
-      coordObj[doc.id] = doc.data()
-    })
-    return coordObj
-  }
+  
 
   useEffect(() => {
+    const getCharCoords = async() => { 
+      // Gets coordinates for character chosen from dropdown.
+      const characterCollection = collection(db, 'coordinates');
+      const characterSnapshot = await getDocs(characterCollection);
+      const coordObj = {}
+      characterSnapshot.docs.forEach( doc => {
+        coordObj[doc.id] = doc.data()
+      })
+      return coordObj
+    }
+
     const characterSetter = async() => {
       try {
         setCharCoords(await getCharCoords())
@@ -47,7 +49,7 @@ export const Game = (props) => {
       }
     }
     characterSetter()
-  }, [])
+  }, [db])
 
   const isGuessCorrect = async(xCoords, yCoords, coordObj) => {
     // Checks whether the coordinates of the user click is within acceptable area for the chosen character.
