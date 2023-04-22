@@ -34,8 +34,8 @@ const App = () => {
       <BrowserRouter>
         <Nav />
         <Routes>
-          <Route path='/' element={<Game getLeaderboards={getLeaderboards} db={db} />}/>
-          <Route path='/leaderboards' element={<LeaderBoards getLeaderboards={getLeaderboards} />} />
+          <Route path='/wheres-waldo-game' element={<Game getLeaderboards={getLeaderboards} db={db} />}/>
+          <Route path='/wheres-waldo-game/leaderboards' element={<LeaderBoards getLeaderboards={getLeaderboards} />} />
         </Routes>
         <Footer />
       </BrowserRouter>

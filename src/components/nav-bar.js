@@ -5,11 +5,11 @@ export const Nav = () => {
   return (
     <div className="nav">
       <div>
-        <Link to='/'><button className="hero">Can You Find</button></Link>
+        <Link to='/wheres-waldo-game'><button className="hero">Can You Find</button></Link>
       </div>
       <div className="nav-button-container">
-        <Link to='/'><button className="nav-button">Play</button></Link>
-        <Link to='/leaderboards'><button className="nav-button">Top 10</button></Link>
+        <Link to='/wheres-waldo-game'><button className="nav-button">Play</button></Link>
+        <Link to='/wheres-waldo-game/leaderboards'><button className="nav-button">Top 10</button></Link>
       </div>
     </div>
   )
